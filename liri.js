@@ -7,7 +7,8 @@ var searchString = "";
 var request = require('request');
 var fs = require("fs");
 var params = {
-  screen_name: 'Yakoloi'
+  screen_name: 'Yakoloi',
+  count: 20
 };
 
 for (var i = 3; i < nodeArgs.length; i++) {
@@ -50,7 +51,13 @@ switch (liriCmd) {
 function myTweets() {
   var mytweets = client.get('statuses/user_timeline', params, function (error, tweets, response) {
     if (!error) {
-      console.log(tweets[0].text);
+      for (var i = 0; i < tweets.length; i++) {
+        var j = i + 1;
+        console.log("Tweet #" + j)
+        console.log(tweets[i].text);
+        console.log(tweets[i].created_at);
+      }
+      
     }
   });
 }
@@ -86,23 +93,37 @@ function lookupMovie() {
 }
 
 function spotifySong() {
-  spotify.search({
-      type: 'track',
-      query: searchString,
-      limit: 2
-    })
-    .then(function (response) {
-      var artistName = response.tracks.items[0].artists[0].name;
-      var songName = response.tracks.items[0].name;
-      var albumName = response.tracks.items[0].album.name;
-      console.log(artistName);
-      console.log(songName);
-      console.log(albumName);
-      console.log(response.tracks.items[0].preview_url);
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
+  if (searchString == "") {
+    spotify
+      .request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
+      .then(function (data) {
+        console.log(data.artists[0].name);
+        console.log(data.name);
+        console.log(data.album.name);
+        console.log(data.preview_url);
+      })
+      .catch(function (err) {
+        console.error('Error occurred: ' + err);
+      });
+  } else {
+    spotify.search({
+        type: 'track',
+        query: searchString,
+        limit: 2
+      })
+      .then(function (response) {
+        var artistName = response.tracks.items[0].artists[0].name;
+        var songName = response.tracks.items[0].name;
+        var albumName = response.tracks.items[0].album.name;
+        console.log(artistName);
+        console.log(songName);
+        console.log(albumName);
+        console.log(response.tracks.items[0].preview_url);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
 }
 
 function doWhatItSays() {
