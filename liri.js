@@ -57,7 +57,7 @@ function myTweets() {
         console.log(tweets[i].text);
         console.log(tweets[i].created_at);
       }
-      
+
     }
   });
 }
@@ -87,6 +87,11 @@ function lookupMovie() {
           console.log("Rotton Tomatoes rating: " + JSON.parse(body).Ratings[1].Value);
         }
         console.log("Plot: " + moviePlot);
+        fs.appendFile("log.txt", function (err) {
+          if (err) {
+            return console.log(err);
+          }
+        });
       }
     });
   }
