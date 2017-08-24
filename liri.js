@@ -87,9 +87,10 @@ function lookupMovie() {
           console.log("Rotton Tomatoes rating: " + JSON.parse(body).Ratings[1].Value);
         }
         console.log("Plot: " + moviePlot);
-        fs.appendFile("log.txt", function (err) {
+        var appendArray = [searchString, movieName, moviePlot]
+        fs.appendFile("log.txt", appendArray,function (err) {
           if (err) {
-            return console.log(err);
+           return console.log(err);
           }
         });
       }
